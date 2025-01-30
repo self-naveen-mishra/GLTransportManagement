@@ -63,20 +63,28 @@ class EmailService:
 
     @staticmethod
     def format_email_body(employee_data: Dict) -> str:
-        """Format employee details into email body."""
+        """Format employee details into email body (HTML format)."""
         return (
-            f"Dear {employee_data.get('Name', 'Employee')},\n\n"
-            f"We are pleased to share your updated transportation details:\n\n"
-            f"🔹 Employee Code: {employee_data.get('Emp Code', 'N/A')}\n"
-            f"🔹 Area: {employee_data.get('Area', 'N/A')}\n"
-            f"🔹 Location: {employee_data.get('Location-Delhi', 'N/A')}\n"
-            f"🔹 Pickup Time: {employee_data.get('Pickup Time', 'N/A')}\n"
-            f"🔹 Contact Number: {employee_data.get('Contact No.', 'N/A')}\n"
-            f"🔹 Process: {employee_data.get('Process', 'N/A')}\n\n"
-            "Please ensure you are available at the designated pickup location on time. "
-            "If you have any questions or need further assistance, feel free to reach out.\n\n"
-            "Best regards,\n"
-            "Your Admin Team"
+            f"<p>Dear {employee_data.get('Name', 'Employee')},</p>"
+            "<p>We are pleased to share your updated transportation details:</p>"
+            "<ul>"
+            f"<li>🔹 Employee Code: {employee_data.get('Emp Code', 'N/A')}</li>"
+            f"<li>🔹 Area: {employee_data.get('Area', 'N/A')}</li>"
+            f"<li>🔹 Location: {employee_data.get('Location-Delhi', 'N/A')}</li>"
+            f"<li>🔹 Pickup Time: {employee_data.get('Pickup Time', 'N/A')}</li>"
+            f"<li>🔹 Contact Number: {employee_data.get('Contact No.', 'N/A')}</li>"
+            f"<li>🔹 Process: {employee_data.get('Process', 'N/A')}</li>"
+            "</ul>"
+            "<p><strong>Note:</strong></p>"
+            "<ol>"
+            "<li>Please remember your route number.</li>"
+            "<li>Please board the cab as per scheduled pick-up time to avoid any inconvenience.</li>"
+            "<li>For any query call on transport helpline number (9266903058) or mail on gl-transport@globallogic.com.</li>"
+            "<li>Use this <a href='https://drive.google.com/file/d/1_zHCfyZ4D4S__gjHnq6LtlzbmjAR35RS/view'>link</a> for transport policy.</li>"
+            "</ol>"
+            "<p>Please ensure you are available at the designated pickup location on time. "
+            "If you have any questions or need further assistance, feel free to reach out.</p>"
+            "<p>Best regards,<br>Your Admin Team</p>"
         )
 
     """Send email using SMTP with error handling."""
@@ -90,7 +98,7 @@ class EmailService:
             msg['From'] = self.sender_email
             msg['To'] = to_email
             msg['Subject'] = subject
-            msg.attach(MIMEText(body, 'plain'))
+            msg.attach(MIMEText(body, 'html'))
 
             with smtplib.SMTP(Config.EMAIL_HOST, Config.EMAIL_PORT) as server:
                 server.starttls()

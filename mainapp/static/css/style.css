@@ -101,20 +101,28 @@ body {
     border-radius: 8px;
 }
 
+#dataTable {
+    width: 100%; /* Ensure the table takes full width */
+    border-collapse: collapse; /* Remove spacing between cells */
+}
+
+#dataTable th, #dataTable td {
+    padding: 8px; /* Add padding for better readability */
+    white-space: nowrap; /* Prevent text from wrapping */
+    text-align: left; /* Align text to the left */
+}
+
+#dataTable th {
+    background-color: rgb(253, 253, 255); /* Header background color */
+    font-weight: bold; /* Make headers bold */
+}
+
 table {
     margin: 0;
     border: none;
 }
 
-tr {
-    padding: 5px;
-    margin: 5px;
-    width: 50px;
-
-}
-
 th {
-    background-color: #58abfe;
     color: rgb(21, 14, 14);
     font-weight: 500;
     position: sticky;
