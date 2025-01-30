@@ -11,6 +11,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import os
 from dotenv import load_dotenv
+from django.http import JsonResponse
 from concurrent.futures import ThreadPoolExecutor
 from functools import partial
 
@@ -150,17 +151,16 @@ def handle_employee_form(request: HttpRequest) -> HttpResponse:
                  {'data_dict': request.session.get('data_dict')})
 
 """Send emails to employees using parallel processing."""
+
 def send_employee_emails(request: HttpRequest) -> HttpResponse:
     if request.method != 'POST':
-        return redirect('handle_employee_form')
+        return JsonResponse({"error": "Invalid request method"}, status=400)
 
     data_dict = request.session.get('data_dict')
     if not data_dict:
-        messages.error(request, 'No data found. Please upload a valid file first.')
-        return redirect('handle_employee_form')
+        return JsonResponse({"error": "No data found. Please upload a valid file first."}, status=400)
 
     email_service = EmailService()
-    messages.info(request, 'Sending emails to employees...')
 
     # Process emails in parallel using ThreadPoolExecutor
     with ThreadPoolExecutor(max_workers=Config.MAX_WORKERS) as executor:
@@ -174,9 +174,9 @@ def send_employee_emails(request: HttpRequest) -> HttpResponse:
 
     success_count = sum(results)
     total_count = len(results)
-    messages.success(
-        request,
-        f'Email sending completed. {success_count}/{total_count} emails sent successfully.'
-    )
 
-    return redirect('handle_employee_form')
+    return JsonResponse({
+        "message": "Email sending completed.",
+        "success_count": success_count,
+        "total_count": total_count
+    })
