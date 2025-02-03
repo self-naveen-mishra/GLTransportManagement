@@ -12,6 +12,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script>
+        // Set global JavaScript variables for Django values
+        const csrfToken = "{{ csrf_token }}";
+        const sendEmployeeEmailsUrl = "{% url 'send_employee_emails' %}";
+    </script>
 </head>
 
 <body>
@@ -134,7 +139,7 @@
                     </div>
 
                     <!-- JavaScript to handle form submission and modal closing -->
-                    <script>
+                    <!-- <script>
                         document.getElementById("confirmSendEmail").addEventListener("click", function () {
                             let sendButton = this;
                             let loader = document.getElementById("emailLoader");
@@ -192,9 +197,7 @@
                                     sendButton.disabled = false;
                                 });
                         });
-                    </script>
-
-
+                    </script> -->
 
 
                     <!-- Send Whatapp to Employees Button -->
@@ -216,8 +219,7 @@
             <div class="tab-pane fade" id="vendor-section">
                 <div class="form-section">
                     <h3 class="mb-4">Vendor Information</h3>
-                    <form id="vendorForm" action="" method="POST"
-                        enctype="multipart/form-data">
+                    <form id="vendorForm" action="" method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="mb-3">
                             <label for="vendorFileUpload" class="form-label">Upload Roaster file</label>

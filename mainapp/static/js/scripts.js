@@ -101,3 +101,89 @@ const debouncedSearch = debounce((e) => {
 }, 300);
 
 searchInput.addEventListener('input', debouncedSearch);
+
+
+
+
+
+
+
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    // Attach event listener to the send email button
+    document.getElementById("confirmSendEmail")?.addEventListener("click", handleSendEmail);
+});
+
+function handleSendEmail() {
+    let sendButton = document.getElementById("confirmSendEmail");
+    let loader = document.getElementById("emailLoader");
+    let modalBody = document.getElementById("modalBody");
+    
+    if (!sendButton || !loader || !modalBody) {
+        console.error("Missing modal elements");
+        return;
+    }
+
+    // Show loading indicator and disable button
+    showLoader(modalBody, loader, sendButton);
+    
+    // Send email request and handle response
+    sendEmailRequest()
+        .then(() => handleSuccess(modalBody, loader))
+        .catch(error => handleError(modalBody, loader, error))
+        .finally(() => sendButton.disabled = false);
+}
+
+function showLoader(modalBody, loader, sendButton) {
+    // Clear modal content and show loading animation
+    modalBody.innerHTML = '';
+    modalBody.appendChild(loader);
+    loader.classList.remove("d-none");
+    sendButton.disabled = true;
+    console.log("Send Email button clicked");
+}
+
+function sendEmailRequest() {
+    // Send POST request to server with CSRF token
+    return fetch(sendEmployeeEmailsUrl, {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": csrfToken,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({})
+    }).then(response => {
+        if (!response.ok) {
+            throw new Error("Network response was not ok");
+        }
+        return response.json();
+    });
+}
+
+function handleSuccess(modalBody, loader) {
+    // Handle successful email send
+    console.log("Email sent successfully");
+    loader.classList.add("d-none");
+    modalBody.innerHTML = '<p class="text-success">Email sent successfully!</p>';
+    setTimeout(closeModal, 1500);
+}
+
+function handleError(modalBody, loader, error) {
+    // Handle email send failure
+    console.error("Error sending email:", error);
+    alert("An error occurred while sending the email. Please check the console for details.");
+    loader.classList.add("d-none");
+    modalBody.innerHTML = '<p class="text-danger">Failed to send email. Please try again.</p>';
+}
+
+function closeModal() {
+    // Close the modal and remove backdrop
+    let modalElement = document.getElementById("confirmModal");
+    if (!modalElement) return;
+    
+    let modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+    modalInstance.hide();
+    document.body.classList.remove("modal-open");
+    document.querySelector(".modal-backdrop")?.remove();
+}
