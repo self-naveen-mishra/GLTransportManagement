@@ -15,7 +15,7 @@
 </head>
 
 <body>
-    
+
     <div class="main-container">
         <div class="portal-header text-center">
             <h1 class="mb-4" style="color: black;">Vendor & Employee Outreach App</h1>
@@ -216,19 +216,17 @@
             <div class="tab-pane fade" id="vendor-section">
                 <div class="form-section">
                     <h3 class="mb-4">Vendor Information</h3>
-                    <form id="vendorForm" onsubmit="return validateForm('vendorForm')">
+                    <form id="vendorForm" action="" method="POST"
+                        enctype="multipart/form-data">
+                        {% csrf_token %}
                         <div class="mb-3">
-                            <label for="vendorSheetLink" class="form-label">Google Sheet Link</label>
-                            <input type="url" class="form-control" id="vendorSheetLink"
-                                placeholder="Enter Google Sheet Link" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="vendorWorksheetName" class="form-label">Worksheet Name</label>
-                            <input type="text" class="form-control" id="vendorWorksheetName"
-                                placeholder="Enter Worksheet Name" required>
+                            <label for="vendorFileUpload" class="form-label">Upload Roaster file</label>
+                            <input type="file" class="form-control" id="vendorFileUpload" name="vendor_file"
+                                accept=".xlsx, .xls, .csv">
+                            <div class="form-text">Supported format: .csv</div>
                         </div>
                         <button type="submit" class="btn btn-primary">
-                            <i class="bi bi-check-circle me-2"></i>Submit
+                            <i class="bi bi-upload me-2"></i>Upload File
                         </button>
                     </form>
                 </div>
